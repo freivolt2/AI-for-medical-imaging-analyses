@@ -79,6 +79,7 @@ val_data = ps.expandDimsList(val_data)
 
 print("Data splitting finished.\n")
 
+
 ########################################################################################################################
 
 def getModel(width=120, height=160, depth=120):
@@ -127,9 +128,9 @@ autoencoder.summary()
 
 print("Building model finished.\n")
 
-##TRAIN#################################################################################################################
+##TRAIN MODEL###########################################################################################################
 
-print("Training...")
+print("Training model...")
 
 autoencoder.fit(train_data, train_data,
                 epochs=200,
@@ -137,9 +138,10 @@ autoencoder.fit(train_data, train_data,
                 shuffle=True,
                 validation_data=(val_data, val_data))
 
-print("Training finished.\n")
+print("Training model finished.\n")
 
 ##SAVE MODEL############################################################################################################
+
 print("Saving model...")
 
 autoencoder.save('autoencoder.h5')

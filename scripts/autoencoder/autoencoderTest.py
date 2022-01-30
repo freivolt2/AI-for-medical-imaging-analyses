@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 from tensorflow_addons.optimizers.weight_decay_optimizers import AdamW
 
 from scripts.common.ProcessingFunctions import ProcessingFunctions as ps

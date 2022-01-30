@@ -4,7 +4,7 @@ from shutil import copyfile
 
 class DatasetSpecifier:
     """Prior to this work we downloaded, not only raw MRI scans, but also all kinds of postprocessed scans. This
-    class serves to select specifc types of postprocessed data from dataset and thus creates a new dataset of such
+    class serves to select specifc types of postprocessed data from dataset, thus creates a new dataset of such
     selected data."""
 
     def __init__(self, postprocessingType, directions):

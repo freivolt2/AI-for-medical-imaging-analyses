@@ -54,3 +54,10 @@ class ProcessingFunctions:
         for i in range(len(volumes)):
             expandedVolumes.append(ProcessingFunctions.expandDims(volumes[i], 3))
         return np.array(expandedVolumes)
+
+    @staticmethod
+    def shuffleDataset(volumes, labels):
+        """Shuffle volumes and their labels"""
+        assert len(volumes) == len(labels)
+        p = np.random.permutation(len(volumes))
+        return volumes[p], labels[p]
