@@ -1,9 +1,15 @@
 import os
 
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID";
+
+# The GPU id to use, usually either "0" or "1";
+os.environ["CUDA_VISIBLE_DEVICES"] = "1";
+
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers, regularizers
+from tensorflow.keras.models import load_model
 from tensorflow_addons.optimizers.weight_decay_optimizers import AdamW
 
 from scripts.common.ProcessingFunctions import ProcessingFunctions as ps
@@ -11,11 +17,14 @@ from scripts.common.ProcessingFunctions import ProcessingFunctions as ps
 for gpu in tf.config.experimental.list_physical_devices('GPU'):
     tf.config.experimental.set_memory_growth(gpu, True)
 
+EPOCHS = 100
+BATCH_SIZE = 10
+
 # Directories to data
-AD = "ADNI/AD"
-NC = "ADNI/NC"
-pMCI = "ADNI/pMCI"
-sMCI = "ADNI/sMCI"
+AD = ""
+NC = ""
+pMCI = ""
+sMCI = ""
 
 ##LOAD DATA FILE PATHS##################################################################################################
 
@@ -117,31 +126,32 @@ def getModel(width=120, height=160, depth=120):
 
     return keras.Model(input, output, name='autoencoder')
 
+
 ##BUILD MODEL###########################################################################################################
 
 print("Building model...")
 
-optimizer = AdamW(learning_rate=1e-4, beta_1=0.9, beta_2=0.9, weight_decay=1e-5)
+optimizer = AdamW(learning_rate=1e-3, beta_1=0.9, beta_2=0.9, weight_decay=1e-5)
 autoencoder = getModel(width=120, height=160, depth=120)
+# autoencoder = load_model('autoencoder.h5', custom_objects={'AdamW': AdamW})
 autoencoder.compile(optimizer=optimizer, loss='mse')
 autoencoder.summary()
 
 print("Building model finished.\n")
 
-##TRAIN MODEL###########################################################################################################
+##TRAIN#################################################################################################################
 
-print("Training model...")
+print("Training...")
 
 autoencoder.fit(train_data, train_data,
-                epochs=200,
-                batch_size=10,
+                epochs=EPOCHS,
+                batch_size=BATCH_SIZE,
                 shuffle=True,
                 validation_data=(val_data, val_data))
 
-print("Training model finished.\n")
+print("Training finished.\n")
 
 ##SAVE MODEL############################################################################################################
-
 print("Saving model...")
 
 autoencoder.save('autoencoder.h5')
